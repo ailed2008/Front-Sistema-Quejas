@@ -38,7 +38,15 @@ export class RegistrarQueja {
     this.cargando=true;
     this.mensajeRespuesta='';
     
-    const formData: QuejaTarjetaRequest = this.quejaForm.value;
+    const raw = this.quejaForm.value;
+
+    // El input datetime-local puede devolver "2026-11-04T21:18" sin segundos.
+    // Spring Boot necesita "2026-11-04T21:18:00" para deserializar LocalDateTime.
+    const hora: string = raw.horaTransaccion?.length === 16
+      ? raw.horaTransaccion + ':00'
+      : raw.horaTransaccion;
+
+    const formData: QuejaTarjetaRequest = { ...raw, horaTransaccion: hora };
 
     this.quejaService.registrarQuejaTarjeta(formData).subscribe({
       next:(response) =>{
