@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   register(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, userData, { responseType: 'text' });
+    return this.http.post<any>(`${this.apiUrl}/register`, userData);
   }
 
   getToken(): string | null {

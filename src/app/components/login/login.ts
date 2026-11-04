@@ -41,8 +41,12 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
         this.cargando = false;
-        // Redirige al panel o vista principal de quejas tras iniciar sesión con éxito
-        this.router.navigate(['/registro-queja']); 
+        // Admin va a lista, ejecutivo va a registrar
+        if (this.authService.isAdmin()) {
+          this.router.navigate(['/lista-quejas']);
+        } else {
+          this.router.navigate(['/registro-queja']);
+        }
       },
       error: (err) => {
         this.cargando = false;

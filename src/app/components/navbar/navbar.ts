@@ -11,7 +11,15 @@ import { AuthService } from '../../services/auth';
   styleUrls: ['./navbar.scss']
 })
 export class NavbarComponent {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(public authService: AuthService, private router: Router) {}
+
+  get rol(): string {
+    return this.authService.getRol() ?? '';
+  }
+
+  get esAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
 
   logout(): void {
     this.authService.logout();

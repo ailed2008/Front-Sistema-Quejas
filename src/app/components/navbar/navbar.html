@@ -1,17 +1,29 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 shadow">
   <a class="navbar-brand fw-bold" href="#">CNBV - Gestión de Quejas</a>
-  
+
   <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
     <ul class="navbar-nav align-items-center">
+
       <li class="nav-item">
         <a class="nav-link" routerLink="/lista-quejas" routerLinkActive="active">Ver Quejas</a>
       </li>
+
+      <!-- Nueva Queja visible para ambos roles -->
       <li class="nav-item">
         <a class="nav-link" routerLink="/registro-queja" routerLinkActive="active">Nueva Queja</a>
       </li>
+
+      <!-- Badge con el rol del usuario -->
+      <li class="nav-item ms-2">
+        <span class="badge" [ngClass]="esAdmin ? 'bg-danger' : 'bg-secondary'">
+          {{ esAdmin ? 'ADMIN' : 'EJECUTIVO' }}
+        </span>
+      </li>
+
       <li class="nav-item ms-3">
         <button class="btn btn-outline-light btn-sm" (click)="logout()">Cerrar Sesión</button>
       </li>
+
     </ul>
   </div>
 </nav>
