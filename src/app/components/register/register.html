@@ -1,0 +1,68 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-lg border-0 rounded-4">
+        
+        <!-- Cabecera -->
+        <div class="card-header bg-primary text-white text-center py-3 rounded-top-4">
+          <h3 class="mb-0 fw-bold">Registro de Nuevo Usuario</h3>
+          <p class="small mb-0 text-white-50">Sistema de Gestión CNBV</p>
+        </div>
+
+        <div class="card-body p-4">
+          
+          <!-- Alertas de éxito o error -->
+          <div *ngIf="mensajeRespuesta" class="alert" [ngClass]="esError ? 'alert-danger' : 'alert-success'" role="alert">
+            {{ mensajeRespuesta }}
+          </div>
+
+          <!-- Formulario Reactivo -->
+          <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+            
+            <!-- Usuario / Correo -->
+            <div class="mb-3">
+              <label for="username" class="form-label fw-semibold">Nombre de Usuario / Correo</label>
+              <input type="text" id="username" class="form-control" formControlName="username" placeholder="ejemplo@banco.com">
+              <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched" class="text-danger small mt-1">
+                El usuario es obligatorio.
+              </div>
+            </div>
+
+            <!-- Contraseña -->
+            <div class="mb-3">
+              <label for="password" class="form-label fw-semibold">Contraseña</label>
+              <input type="password" id="password" class="form-control" formControlName="password" placeholder="********">
+              <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="text-danger small mt-1">
+                La contraseña debe tener al menos 6 caracteres.
+              </div>
+            </div>
+
+            <!-- Rol del Sistema -->
+            <div class="mb-4">
+              <label for="role" class="form-label fw-semibold">Rol del Sistema</label>
+              <select id="role" class="form-select" formControlName="role">
+                <option value="EJECUTIVO">Ejecutivo</option>
+                <option value="ADMIN">Administrador</option>
+              </select>
+            </div>
+
+            <!-- Botón de Registro -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary fw-bold py-2" [disabled]="cargando">
+                <span *ngIf="cargando" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                {{ cargando ? 'Registrando...' : 'Registrar Cuenta' }}
+              </button>
+            </div>
+
+          </form>
+
+          <!-- Enlace para ir al Login -->
+          <div class="text-center mt-3">
+            <p class="small text-muted">¿Ya tienes una cuenta? <a routerLink="/login" class="text-decoration-none fw-semibold">Inicia sesión aquí</a></p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

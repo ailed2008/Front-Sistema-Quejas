@@ -1,0 +1,76 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-11">
+      
+      <div class="card shadow-lg border-0 rounded-4">
+        <!-- Cabecera -->
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3 rounded-top-4">
+          <h3 class="mb-0 fw-bold">Listado de Quejas Registradas</h3>
+          <button class="btn btn-light btn-sm fw-semibold" routerLink="/registro-queja">
+            + Registrar Nueva Queja
+          </button>
+        </div>
+
+        <div class="card-body p-4">
+          
+          <!-- Alerta de carga o error -->
+          <div *ngIf="cargando" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="text-muted mt-2">Cargando quejas...</p>
+          </div>
+
+          <div *ngIf="mensajeError" class="alert alert-danger" role="alert">
+            {{ mensajeError }}
+          </div>
+
+          <!-- Tabla de Datos -->
+          <div *ngIf="!cargando && !mensajeError" class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-dark">
+                <tr>
+                  <th>Folio</th>
+                  <th>Cliente</th>
+                  <th>Fecha Recepción</th>
+                  <th>Monto ($)</th>
+                  <th>Prioridad</th>
+                  <th>Estado</th>
+                  <th>Lugar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let queja of quejas">
+                  <td class="fw-bold">{{ queja.folio }}</td>
+                  <td>{{ queja.numCliente }}</td>
+                  <td>{{ queja.fechaRecepcion | date:'short' }}</td>
+                  <td>${{ queja.montoReclamado | number:'1.2-2' }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="{
+                      'bg-danger': queja.prioridad === 'ALTA',
+                      'bg-warning text-dark': queja.prioridad === 'MEDIA',
+                      'bg-success': queja.prioridad === 'BAJA'
+                    }">
+                      {{ queja.prioridad }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge bg-secondary">{{ queja.estado }}</span>
+                  </td>
+                  <td>{{ queja.lugarSuceso }}</td>
+                </tr>
+                
+                <!-- Mensaje si no hay registros -->
+                <tr *ngIf="quejas.length === 0">
+                  <td colspan="7" class="text-center text-muted py-4">
+                    No hay quejas registradas en el sistema.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

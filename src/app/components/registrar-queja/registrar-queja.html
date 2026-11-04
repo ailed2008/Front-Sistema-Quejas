@@ -1,0 +1,94 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+      <div class="card shadow-lg border-0 rounded-4">
+        
+        <!-- Cabecera de la Tarjeta -->
+        <div class="card-header bg-primary text-white text-center py-3 rounded-top-4">
+          <h3 class="mb-0 fw-bold">Registro de Queja - Tarjeta de Crédito</h3>
+          <p class="small mb-0 text-white-50">Sistema de Gestión CNBV</p>
+        </div>
+
+        <div class="card-body p-4">
+          
+          <!-- Alertas de éxito o error -->
+          <div *ngIf="mensajeRespuesta" class="alert" [ngClass]="esError ? 'alert-danger' : 'alert-success'" role="alert">
+            {{ mensajeRespuesta }}
+          </div>
+
+          <!-- Formulario Reactivo -->
+          <form [formGroup]="quejaForm" (ngSubmit)="onSubmit()">
+            
+            <div class="row">
+              <!-- Folio -->
+              <div class="col-md-6 mb-3">
+                <label for="folio" class="form-label fw-semibold">Folio</label>
+                <input type="text" id="folio" class="form-control" formControlName="folio" placeholder="Ej. Q-2026-001">
+                <div *ngIf="quejaForm.get('folio')?.invalid && quejaForm.get('folio')?.touched" class="text-danger small mt-1">
+                  El folio es obligatorio (mínimo 3 caracteres).
+                </div>
+              </div>
+
+              <!-- Número de Cliente -->
+              <div class="col-md-6 mb-3">
+                <label for="numCliente" class="form-label fw-semibold">Número de Cliente</label>
+                <input type="text" id="numCliente" class="form-control" formControlName="numCliente" placeholder="Ej. CLI-98765">
+                <div *ngIf="quejaForm.get('numCliente')?.invalid && quejaForm.get('numCliente')?.touched" class="text-danger small mt-1">
+                  El número de cliente es obligatorio.
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Monto Reclamado -->
+              <div class="col-md-6 mb-3">
+                <label for="montoReclamado" class="form-label fw-semibold">Monto Reclamado ($)</label>
+                <input type="number" step="0.01" id="montoReclamado" class="form-control" formControlName="montoReclamado" placeholder="0.00">
+                <div *ngIf="quejaForm.get('montoReclamado')?.invalid && quejaForm.get('montoReclamado')?.touched" class="text-danger small mt-1">
+                  Ingrese un monto válido mayor a 0.
+                </div>
+              </div>
+
+              <!-- Prioridad -->
+              <div class="col-md-6 mb-3">
+                <label for="prioridad" class="form-label fw-semibold">Prioridad (SLA)</label>
+                <select id="prioridad" class="form-select" formControlName="prioridad">
+                  <option value="BAJA">Baja</option>
+                  <option value="MEDIA">Media</option>
+                  <option value="ALTA">Alta</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Lugar del Suceso -->
+            <div class="mb-3">
+              <label for="lugarSuceso" class="form-label fw-semibold">Lugar del Suceso / Sucursal</label>
+              <input type="text" id="lugarSuceso" class="form-control" formControlName="lugarSuceso" placeholder="Ej. CDMX - Sucursal Polanco">
+              <div *ngIf="quejaForm.get('lugarSuceso')?.invalid && quejaForm.get('lugarSuceso')?.touched" class="text-danger small mt-1">
+                El lugar del suceso es requerido.
+              </div>
+            </div>
+
+            <!-- Hora de la Transacción -->
+            <div class="mb-4">
+              <label for="horaTransaccion" class="form-label fw-semibold">Fecha y Hora de la Transacción</label>
+              <input type="datetime-local" id="horaTransaccion" class="form-control" formControlName="horaTransaccion">
+              <div *ngIf="quejaForm.get('horaTransaccion')?.invalid && quejaForm.get('horaTransaccion')?.touched" class="text-danger small mt-1">
+                Seleccione la fecha y hora de la transacción.
+              </div>
+            </div>
+
+            <!-- Botón de Envío -->
+            <div class="d-grid">
+              <button type="submit" class="py-2 btn btn-primary fw-bold" [disabled]="cargando">
+                <span *ngIf="cargando" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                {{ cargando ? 'Registrando...' : 'Registrar Queja en Sistema' }}
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
