@@ -1,7 +1,7 @@
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-11">
-      
+
       <div class="card shadow-lg border-0 rounded-4">
         <!-- Cabecera -->
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3 rounded-top-4">
@@ -12,18 +12,22 @@
         </div>
 
         <div class="card-body p-4">
-          
-          <!-- Alerta de carga o error -->
+
+          <!-- Mensajes de éxito / error -->
+          <div *ngIf="mensajeExito" class="alert alert-success alert-dismissible" role="alert">
+            {{ mensajeExito }}
+          </div>
+          <div *ngIf="mensajeError" class="alert alert-danger" role="alert">
+            {{ mensajeError }}
+          </div>
+
+          <!-- Cargando -->
           <div *ngIf="cargando" class="text-center py-4">
             <div class="spinner-border text-primary" role="status"></div>
             <p class="text-muted mt-2">Cargando quejas...</p>
           </div>
 
-          <div *ngIf="mensajeError" class="alert alert-danger" role="alert">
-            {{ mensajeError }}
-          </div>
-
-          <!-- Tabla de Datos -->
+          <!-- Tabla -->
           <div *ngIf="!cargando && !mensajeError" class="table-responsive">
             <table class="table table-hover align-middle">
               <thead class="table-dark">
@@ -35,6 +39,7 @@
                   <th>Prioridad</th>
                   <th>Estado</th>
                   <th>Lugar</th>
+                  <th *ngIf="esAdmin" class="text-center">Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -53,14 +58,37 @@
                     </span>
                   </td>
                   <td>
-                    <span class="badge bg-secondary">{{ queja.estado }}</span>
+                    <span class="badge" [ngClass]="{
+                      'bg-secondary': queja.estado === 'REGISTRADA',
+                      'bg-info text-dark': queja.estado === 'EN_INVESTIGACION',
+                      'bg-primary': queja.estado === 'DICTAMINADA',
+                      'bg-success': queja.estado === 'CERRADA'
+                    }">
+                      {{ queja.estado }}
+                    </span>
                   </td>
                   <td>{{ queja.lugarSuceso }}</td>
+
+                  <!-- Acciones solo para ADMIN -->
+                  <td *ngIf="esAdmin" class="text-center">
+                    <button
+                      class="btn btn-sm btn-outline-primary me-2"
+                      title="Emitir dictamen"
+                      [disabled]="queja.estado === 'DICTAMINADA' || queja.estado === 'CERRADA'"
+                      (click)="abrirModalDictamen(queja.folio)">
+                      📋 Dictaminar
+                    </button>
+                    <button
+                      class="btn btn-sm btn-outline-danger"
+                      title="Eliminar queja"
+                      (click)="eliminar(queja.folio)">
+                      🗑️ Eliminar
+                    </button>
+                  </td>
                 </tr>
-                
-                <!-- Mensaje si no hay registros -->
+
                 <tr *ngIf="quejas.length === 0">
-                  <td colspan="7" class="text-center text-muted py-4">
+                  <td [attr.colspan]="esAdmin ? 8 : 7" class="text-center text-muted py-4">
                     No hay quejas registradas en el sistema.
                   </td>
                 </tr>
@@ -71,6 +99,36 @@
         </div>
       </div>
 
+    </div>
+  </div>
+</div>
+
+<!-- Modal Dictamen (solo ADMIN) -->
+<div *ngIf="mostrarModalDictamen" class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header bg-primary text-white rounded-top-4">
+        <h5 class="modal-title">Emitir Dictamen — {{ folioSeleccionado }}</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cerrarModalDictamen()"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label fw-semibold">Texto del dictamen</label>
+        <textarea
+          class="form-control"
+          rows="4"
+          placeholder="Escriba el dictamen de resolución..."
+          [(ngModel)]="textoDictamen">
+        </textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="cerrarModalDictamen()">Cancelar</button>
+        <button
+          class="btn btn-primary"
+          [disabled]="!textoDictamen.trim()"
+          (click)="confirmarDictamen()">
+          Confirmar Dictamen
+        </button>
+      </div>
     </div>
   </div>
 </div>

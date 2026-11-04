@@ -21,4 +21,22 @@ export class QuejaService{
     registrarQuejaTarjeta(dto: QuejaTarjetaRequest) : Observable<string>{
         return this.http.post(`${this.apiUrl}/tarjeta`, dto, {responseType: 'text'});
     }
+
+    eliminarQueja(folio: string): Observable<string> {
+        return this.http.delete(`${this.apiUrl}/${folio}`, { responseType: 'text' });
+    }
+
+    emitirDictamen(folio: string, textoDictamen: string): Observable<string> {
+        return this.http.patch(`${this.apiUrl}/${folio}/dictamen`, textoDictamen, {
+            responseType: 'text',
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+
+    cambiarEstado(folio: string, nuevoEstado: string): Observable<string> {
+        return this.http.patch(`${this.apiUrl}/${folio}/estado`, null, {
+            params: { nuevoEstado },
+            responseType: 'text'
+        });
+    }
 }

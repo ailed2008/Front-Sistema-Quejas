@@ -1,13 +1,15 @@
-import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { QuejaService } from '../../services/queja';
+import { AuthService } from '../../services/auth';
 import { QuejaResponse } from '../../models/queja.model';
 
 @Component({
   selector: 'app-lista-quejas',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './lista-quejas.html',
   styleUrls: ['./lista-quejas.scss']
 })
@@ -15,16 +17,27 @@ export class ListaQuejasComponent implements OnInit {
   quejas: QuejaResponse[] = [];
   cargando: boolean = true;
   mensajeError: string = '';
+  mensajeExito: string = '';
 
-constructor(
+  // Modal dictamen
+  folioSeleccionado: string = '';
+  textoDictamen: string = '';
+  mostrarModalDictamen: boolean = false;
+
+  constructor(
     private quejaService: QuejaService,
+    private authService: AuthService,
     private cdr: ChangeDetectorRef
   ) {}
+
+  get esAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
 
   ngOnInit(): void {
     this.cargarQuejas();
   }
-/*
+
   cargarQuejas(): void {
     this.cargando = true;
     this.mensajeError = '';
@@ -33,34 +46,7 @@ constructor(
       next: (data) => {
         this.quejas = data;
         this.cargando = false;
-      },
-      error: (err) => {
-        this.cargando = false; // ¡Desactiva el "cargando" para que no se quede colgado!
-        
-        // Detectar si es un error de permisos (403) o de autenticación (401)
-        if (err.status === 403) {
-          this.mensajeError = '❌ Acceso denegado (403): Tu usuario no tiene el rol necesario (ADMIN o EJECUTIVO) para ver las quejas.';
-        } else if (err.status === 401) {
-          this.mensajeError = '❌ No autorizado (401): Tu sesión expiró o el token no es válido.';
-        } else {
-          this.mensajeError = `❌ Error al cargar las quejas (Código ${err.status}): ${err.error?.mensaje || err.message}`;
-        }
-        
-        console.error('Detalle del error:', err);
-      }
-    });
-  }
-  */
-
-cargarQuejas(): void {
-    this.cargando = true;
-    this.mensajeError = '';
-
-    this.quejaService.listarQuejas().subscribe({
-      next: (data) => {
-        this.quejas = data;
-        this.cargando = false;
-        this.cdr.markForCheck(); // Fuerza la actualización de la vista de forma segura
+        this.cdr.markForCheck();
       },
       error: (err) => {
         this.cargando = false;
@@ -69,5 +55,53 @@ cargarQuejas(): void {
         console.error('Error al listar quejas:', err);
       }
     });
-}
+  }
+
+  eliminar(folio: string): void {
+    if (!confirm(`¿Seguro que deseas eliminar la queja ${folio}? Esta acción no se puede deshacer.`)) return;
+
+    this.quejaService.eliminarQueja(folio).subscribe({
+      next: () => {
+        this.quejas = this.quejas.filter(q => q.folio !== folio);
+        this.mensajeExito = `✅ Queja ${folio} eliminada correctamente.`;
+        this.cdr.markForCheck();
+        setTimeout(() => { this.mensajeExito = ''; this.cdr.markForCheck(); }, 4000);
+      },
+      error: (err) => {
+        this.mensajeError = `❌ Error al eliminar la queja ${folio}.`;
+        console.error(err);
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  abrirModalDictamen(folio: string): void {
+    this.folioSeleccionado = folio;
+    this.textoDictamen = '';
+    this.mostrarModalDictamen = true;
+  }
+
+  cerrarModalDictamen(): void {
+    this.mostrarModalDictamen = false;
+    this.folioSeleccionado = '';
+    this.textoDictamen = '';
+  }
+
+  confirmarDictamen(): void {
+    if (!this.textoDictamen.trim()) return;
+
+    this.quejaService.emitirDictamen(this.folioSeleccionado, this.textoDictamen).subscribe({
+      next: () => {
+        this.mensajeExito = `✅ Dictamen emitido para la queja ${this.folioSeleccionado}.`;
+        this.cerrarModalDictamen();
+        this.cargarQuejas();
+        setTimeout(() => { this.mensajeExito = ''; this.cdr.markForCheck(); }, 4000);
+      },
+      error: (err) => {
+        this.mensajeError = `❌ Error al emitir el dictamen.`;
+        console.error(err);
+        this.cdr.markForCheck();
+      }
+    });
+  }
 }

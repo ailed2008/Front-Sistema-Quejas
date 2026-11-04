@@ -20,6 +20,12 @@ export class AuthService {
       tap(response => {
         if (response && response.token) {
           this.setToken(response.token);
+          // El backend ya devuelve el rol directamente en la respuesta
+          if (response.rol) {
+            localStorage.setItem('rol', response.rol);
+          } else {
+            this.setRolFromToken(response.token);
+          }
         }
       })
     );
@@ -42,9 +48,39 @@ export class AuthService {
     }
   }
 
+  /** Decodifica el JWT y guarda el rol en localStorage */
+  private setRolFromToken(token: string): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      // Spring Security guarda los roles en "roles" o "role" según configuración
+      const rol: string =
+        payload.rol ||
+        payload.role ||
+        (payload.roles && payload.roles[0]) ||
+        (payload.authorities && payload.authorities[0]?.replace('ROLE_', '')) ||
+        '';
+      localStorage.setItem('rol', rol.replace('ROLE_', ''));
+    } catch {
+      localStorage.setItem('rol', '');
+    }
+  }
+
+  getRol(): string | null {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('rol');
+    }
+    return null;
+  }
+
+  isAdmin(): boolean {
+    return this.getRol() === 'ADMIN';
+  }
+
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('token');
+      localStorage.removeItem('rol');
     }
   }
 
