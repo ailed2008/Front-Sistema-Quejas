@@ -72,7 +72,13 @@
             <!-- Hora de la Transacción -->
             <div class="mb-4">
               <label for="horaTransaccion" class="form-label fw-semibold">Fecha y Hora de la Transacción</label>
-              <input type="datetime-local" id="horaTransaccion" class="form-control" formControlName="horaTransaccion">
+              <input 
+                type="datetime-local" 
+                id="horaTransaccion" 
+                class="form-control" 
+                formControlName="horaTransaccion"
+                min="2000-01-01T00:00"
+                max="2099-12-31T23:59">
               <div *ngIf="quejaForm.get('horaTransaccion')?.invalid && quejaForm.get('horaTransaccion')?.touched" class="text-danger small mt-1">
                 Seleccione la fecha y hora de la transacción.
               </div>

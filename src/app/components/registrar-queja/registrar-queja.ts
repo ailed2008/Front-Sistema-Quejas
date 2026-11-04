@@ -46,6 +46,15 @@ export class RegistrarQueja {
       ? raw.horaTransaccion + ':00'
       : raw.horaTransaccion;
 
+    // Validar que el año sea razonable (bug de iOS Safari con años de 5 dígitos)
+    const anio = new Date(hora).getFullYear();
+    if (isNaN(anio) || anio < 2000 || anio > 2099) {
+      this.cargando = false;
+      this.esError = true;
+      this.mensajeRespuesta = 'La fecha ingresada no es válida. Por favor verifique el año.';
+      return;
+    }
+
     const formData: QuejaTarjetaRequest = { ...raw, horaTransaccion: hora };
 
     this.quejaService.registrarQuejaTarjeta(formData).subscribe({
