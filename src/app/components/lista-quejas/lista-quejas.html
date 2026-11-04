@@ -1,134 +1,134 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-11">
+<div class="container-fluid px-4 py-4">
 
-      <div class="card shadow-lg border-0 rounded-4">
-        <!-- Cabecera -->
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3 rounded-top-4">
-          <h3 class="mb-0 fw-bold">Listado de Quejas Registradas</h3>
-          <button class="btn btn-light btn-sm fw-semibold" routerLink="/registro-queja">
-            + Registrar Nueva Queja
-          </button>
-        </div>
+  <div class="bank-panel">
 
-        <div class="card-body p-4">
+    <div class="bank-panel-header">
+      <div>
+        <h3>Quejas Registradas</h3>
+        <div class="header-subtitle">Consulta y gestión de reclamaciones</div>
+      </div>
+      <button class="btn-bank-outline" style="color:#fff;border-color:rgba(255,255,255,0.4);"
+              routerLink="/registro-queja">
+        + Nueva Queja
+      </button>
+    </div>
 
-          <!-- Mensajes de éxito / error -->
-          <div *ngIf="mensajeExito" class="alert alert-success alert-dismissible" role="alert">
-            {{ mensajeExito }}
-          </div>
-          <div *ngIf="mensajeError" class="alert alert-danger" role="alert">
-            {{ mensajeError }}
-          </div>
+    <div class="bank-panel-body">
 
-          <!-- Cargando -->
-          <div *ngIf="cargando" class="text-center py-4">
-            <div class="spinner-border text-primary" role="status"></div>
-            <p class="text-muted mt-2">Cargando quejas...</p>
-          </div>
+      <!-- Mensajes -->
+      <div *ngIf="mensajeExito" class="alert alert-success" role="alert">{{ mensajeExito }}</div>
+      <div *ngIf="mensajeError" class="alert alert-danger"  role="alert">{{ mensajeError }}</div>
 
-          <!-- Tabla -->
-          <div *ngIf="!cargando && !mensajeError" class="table-responsive">
-            <table class="table table-hover align-middle">
-              <thead class="table-dark">
-                <tr>
-                  <th>Folio</th>
-                  <th>Cliente</th>
-                  <th>Fecha Recepción</th>
-                  <th>Monto ($)</th>
-                  <th>Prioridad</th>
-                  <th>Estado</th>
-                  <th>Lugar</th>
-                  <th *ngIf="esAdmin" class="text-center">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let queja of quejas">
-                  <td class="fw-bold">{{ queja.folio }}</td>
-                  <td>{{ queja.numCliente }}</td>
-                  <td>{{ queja.fechaRecepcion | date:'short' }}</td>
-                  <td>${{ queja.montoReclamado | number:'1.2-2' }}</td>
-                  <td>
-                    <span class="badge" [ngClass]="{
-                      'bg-danger': queja.prioridad === 'ALTA',
-                      'bg-warning text-dark': queja.prioridad === 'MEDIA',
-                      'bg-success': queja.prioridad === 'BAJA'
-                    }">
-                      {{ queja.prioridad }}
-                    </span>
-                  </td>
-                  <td>
-                    <span class="badge" [ngClass]="{
-                      'bg-secondary': queja.estado === 'REGISTRADA',
-                      'bg-info text-dark': queja.estado === 'EN_INVESTIGACION',
-                      'bg-primary': queja.estado === 'DICTAMINADA',
-                      'bg-success': queja.estado === 'CERRADA'
-                    }">
-                      {{ queja.estado }}
-                    </span>
-                  </td>
-                  <td>{{ queja.lugarSuceso }}</td>
+      <!-- Cargando -->
+      <div *ngIf="cargando" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status" style="width:1.5rem;height:1.5rem;"></div>
+        <p class="text-muted mt-2" style="font-size:0.82rem;letter-spacing:0.04em;">CARGANDO REGISTROS...</p>
+      </div>
 
-                  <!-- Acciones solo para ADMIN -->
-                  <td *ngIf="esAdmin" class="text-center">
-                    <button
-                      class="btn btn-sm btn-outline-primary me-2"
-                      title="Emitir dictamen"
-                      [disabled]="queja.estado === 'DICTAMINADA' || queja.estado === 'CERRADA'"
-                      (click)="abrirModalDictamen(queja.folio)">
-                      📋 Dictaminar
-                    </button>
-                    <button
-                      class="btn btn-sm btn-outline-danger"
-                      title="Eliminar queja"
-                      (click)="eliminar(queja.folio)">
-                      🗑️ Eliminar
-                    </button>
-                  </td>
-                </tr>
+      <!-- Tabla -->
+      <div *ngIf="!cargando && !mensajeError" class="table-responsive">
+        <table class="bank-table">
+          <thead>
+            <tr>
+              <th>Folio</th>
+              <th>N° Cliente</th>
+              <th>Fecha Recepción</th>
+              <th>Monto</th>
+              <th>Prioridad</th>
+              <th>Estado</th>
+              <th>Lugar</th>
+              <th *ngIf="esAdmin" class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let queja of quejas">
 
-                <tr *ngIf="quejas.length === 0">
-                  <td [attr.colspan]="esAdmin ? 8 : 7" class="text-center text-muted py-4">
-                    No hay quejas registradas en el sistema.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+              <td class="folio-cell">{{ queja.folio }}</td>
+              <td>{{ queja.numCliente }}</td>
+              <td>{{ queja.fechaRecepcion | date:'dd/MM/yyyy' }}</td>
+              <td>${{ queja.montoReclamado | number:'1.2-2' }}</td>
 
-        </div>
+              <td>
+                <span class="priority-badge"
+                  [ngClass]="{
+                    'priority-alta':  queja.prioridad === 'ALTA',
+                    'priority-media': queja.prioridad === 'MEDIA',
+                    'priority-baja':  queja.prioridad === 'BAJA'
+                  }">
+                  {{ queja.prioridad }}
+                </span>
+              </td>
+
+              <td>
+                <span class="status-badge"
+                  [ngClass]="{
+                    'status-registrada':    queja.estado === 'REGISTRADA',
+                    'status-investigacion': queja.estado === 'EN_INVESTIGACION',
+                    'status-dictaminada':   queja.estado === 'DICTAMINADA',
+                    'status-cerrada':       queja.estado === 'CERRADA'
+                  }">
+                  {{ queja.estado === 'EN_INVESTIGACION' ? 'EN INVESTIGACIÓN' : queja.estado }}
+                </span>
+              </td>
+
+              <td>{{ queja.lugarSuceso }}</td>
+
+              <td *ngIf="esAdmin" class="text-center">
+                <button class="btn-bank-outline me-2"
+                        [disabled]="queja.estado === 'DICTAMINADA' || queja.estado === 'CERRADA'"
+                        (click)="abrirModalDictamen(queja.folio)">
+                  Dictaminar
+                </button>
+                <button class="btn-bank-danger"
+                        (click)="eliminar(queja.folio)">
+                  Eliminar
+                </button>
+              </td>
+
+            </tr>
+
+            <tr *ngIf="quejas.length === 0">
+              <td [attr.colspan]="esAdmin ? 8 : 7"
+                  class="text-center py-5"
+                  style="color:#a0aec0;font-size:0.83rem;letter-spacing:0.04em;">
+                NO HAY REGISTROS EN EL SISTEMA
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
     </div>
   </div>
+
 </div>
 
-<!-- Modal Dictamen (solo ADMIN) -->
-<div *ngIf="mostrarModalDictamen" class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.5);">
+<!-- Modal Dictamen -->
+<div *ngIf="mostrarModalDictamen" class="modal d-block bank-modal" tabindex="-1"
+     style="background:rgba(10,29,50,0.65);">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content rounded-4">
-      <div class="modal-header bg-primary text-white rounded-top-4">
-        <h5 class="modal-title">Emitir Dictamen — {{ folioSeleccionado }}</h5>
+    <div class="modal-content" style="border-radius:4px;border:none;">
+
+      <div class="modal-header">
+        <span class="modal-title">Emisión de Dictamen &mdash; {{ folioSeleccionado }}</span>
         <button type="button" class="btn-close btn-close-white" (click)="cerrarModalDictamen()"></button>
       </div>
-      <div class="modal-body">
-        <label class="form-label fw-semibold">Texto del dictamen</label>
-        <textarea
-          class="form-control"
-          rows="4"
-          placeholder="Escriba el dictamen de resolución..."
-          [(ngModel)]="textoDictamen">
+
+      <div class="modal-body p-4">
+        <label class="form-label">Texto del dictamen</label>
+        <textarea class="form-control" rows="5"
+                  placeholder="Ingrese la resolución formal de la queja..."
+                  [(ngModel)]="textoDictamen">
         </textarea>
       </div>
+
       <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="cerrarModalDictamen()">Cancelar</button>
-        <button
-          class="btn btn-primary"
-          [disabled]="!textoDictamen.trim()"
-          (click)="confirmarDictamen()">
-          Confirmar Dictamen
+        <button class="btn-bank-outline" (click)="cerrarModalDictamen()">Cancelar</button>
+        <button class="btn-bank" [disabled]="!textoDictamen.trim()" (click)="confirmarDictamen()">
+          Emitir Dictamen
         </button>
       </div>
+
     </div>
   </div>
 </div>

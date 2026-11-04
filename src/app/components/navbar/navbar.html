@@ -1,29 +1,16 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 shadow">
-  <a class="navbar-brand fw-bold" href="#">Sistema de Gestión Bancario</a>
+<nav class="navbar-bank">
+  <div class="d-flex align-items-center justify-content-between w-100">
 
-  <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-    <ul class="navbar-nav align-items-center">
+    <a class="navbar-brand" href="#">
+      Sistema de <span class="brand-accent">Gestión Bancario</span>
+    </a>
 
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/lista-quejas" routerLinkActive="active">Ver Quejas</a>
-      </li>
+    <div class="d-flex align-items-center gap-3">
+      <a class="nav-link" routerLink="/lista-quejas" routerLinkActive="active">Quejas</a>
+      <a class="nav-link" routerLink="/registro-queja" routerLinkActive="active">Nueva Queja</a>
+      <span class="badge-rol">{{ esAdmin ? 'Administrador' : 'Ejecutivo' }}</span>
+      <button class="btn-logout" (click)="logout()">Cerrar Sesión</button>
+    </div>
 
-      <!-- Nueva Queja visible para ambos roles -->
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/registro-queja" routerLinkActive="active">Nueva Queja</a>
-      </li>
-
-      <!-- Badge con el rol del usuario -->
-      <li class="nav-item ms-2">
-        <span class="badge" [ngClass]="esAdmin ? 'bg-danger' : 'bg-secondary'">
-          {{ esAdmin ? 'ADMIN' : 'EJECUTIVO' }}
-        </span>
-      </li>
-
-      <li class="nav-item ms-3">
-        <button class="btn btn-outline-light btn-sm" (click)="logout()">Cerrar Sesión</button>
-      </li>
-
-    </ul>
   </div>
 </nav>
