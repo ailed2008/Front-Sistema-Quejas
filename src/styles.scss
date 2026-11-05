@@ -25,7 +25,12 @@ body {
 .navbar-bank {
   background-color: #0a2d6e;
   border-bottom: 3px solid #c9a84c;
-  padding: 0.6rem 2rem;
+  padding: 0.6rem 1rem;
+  flex-wrap: wrap;
+
+  @media (min-width: 768px) {
+    padding: 0.6rem 2rem;
+  }
 
   .navbar-brand {
     font-size: 1rem;
@@ -352,4 +357,203 @@ body {
   border-radius: 3px;
   font-size: 0.83rem;
   border-left-width: 4px;
+}
+
+// ── Navbar hamburguesa (móvil) ────────────────────────────────
+.navbar-toggler-bank {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 3px;
+  padding: 6px 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+}
+
+.nav-mobile {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+
+  .nav-mobile-link {
+    display: block;
+    padding: 0.65rem 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    transition: background 0.15s;
+
+    &:hover, &.active {
+      color: #fff;
+      background: rgba(255,255,255,0.07);
+    }
+  }
+
+  .nav-mobile-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0.5rem 0.25rem;
+    gap: 0.75rem;
+  }
+}
+
+// ── Navbar bancario responsive ────────────────────────────────
+.navbar-bank {
+  padding: 0.6rem 1rem;
+
+  @media (min-width: 768px) {
+    padding: 0.6rem 2rem;
+  }
+}
+
+// ── Panel bancario responsive ─────────────────────────────────
+.bank-panel {
+  .bank-panel-header {
+    padding: 0.85rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    @media (min-width: 768px) {
+      padding: 1rem 1.5rem;
+    }
+
+    h2, h3 {
+      font-size: 0.85rem;
+
+      @media (min-width: 768px) {
+        font-size: 0.95rem;
+      }
+    }
+  }
+
+  .bank-panel-body {
+    padding: 1rem;
+
+    @media (min-width: 768px) {
+      padding: 1.75rem;
+    }
+  }
+}
+
+// ── Tabla responsiva en móvil (card por fila) ─────────────────
+@media (max-width: 767px) {
+  .bank-table {
+    thead { display: none; }
+
+    tbody tr {
+      display: block;
+      background: #fff;
+      border: 1px solid #e2e6ea;
+      border-radius: 4px;
+      margin-bottom: 0.75rem;
+      padding: 0.75rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    tbody td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.35rem 0;
+      border: none;
+      border-bottom: 1px solid #f0f2f5;
+      font-size: 0.82rem;
+
+      &:last-child { border-bottom: none; }
+
+      &::before {
+        content: attr(data-label);
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #a0aec0;
+        flex-shrink: 0;
+        margin-right: 0.5rem;
+      }
+    }
+  }
+
+  // Botones de acción apilados en móvil
+  .action-cell {
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    gap: 0.4rem;
+
+    button { width: 100%; text-align: center; }
+  }
+}
+
+// ── Login responsivo ──────────────────────────────────────────
+.login-page {
+  padding: 1rem;
+
+  .login-box {
+    .login-header {
+      padding: 1.5rem 1.25rem;
+
+      @media (min-width: 768px) {
+        padding: 2rem;
+      }
+
+      .login-logo {
+        font-size: 1.3rem;
+
+        @media (min-width: 768px) {
+          font-size: 1.6rem;
+        }
+      }
+    }
+
+    .login-body {
+      padding: 1.25rem;
+
+      @media (min-width: 768px) {
+        padding: 2rem;
+      }
+    }
+  }
+}
+
+// ── Formulario responsivo ─────────────────────────────────────
+@media (max-width: 576px) {
+  .d-flex.justify-content-end.gap-2 {
+    flex-direction: column;
+
+    button { width: 100%; }
+  }
+}
+
+// ── Modal responsivo ──────────────────────────────────────────
+.bank-modal {
+  .modal-dialog {
+    margin: 0.75rem;
+
+    @media (min-width: 576px) {
+      margin: 1.75rem auto;
+    }
+  }
+}
+
+// ── Container fluid en móvil ──────────────────────────────────
+.container-fluid {
+  @media (max-width: 576px) {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
 }

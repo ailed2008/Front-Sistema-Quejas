@@ -11,6 +11,8 @@ import { AuthService } from '../../services/auth';
   styleUrls: ['./navbar.scss']
 })
 export class NavbarComponent {
+  menuAbierto = false;
+
   constructor(public authService: AuthService, private router: Router) {}
 
   get rol(): string {

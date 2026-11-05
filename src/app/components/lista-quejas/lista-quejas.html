@@ -43,12 +43,12 @@
           <tbody>
             <tr *ngFor="let queja of quejas">
 
-              <td class="folio-cell">{{ queja.folio }}</td>
-              <td>{{ queja.customerNumber }}</td>
-              <td>{{ queja.receptionDate | date:'dd/MM/yyyy' }}</td>
-              <td>${{ queja.claimedAmount | number:'1.2-2' }}</td>
+              <td class="folio-cell" data-label="Folio">{{ queja.folio }}</td>
+              <td data-label="N° Cliente">{{ queja.customerNumber }}</td>
+              <td data-label="Fecha">{{ queja.receptionDate | date:'dd/MM/yyyy' }}</td>
+              <td data-label="Monto">${{ queja.claimedAmount | number:'1.2-2' }}</td>
 
-              <td>
+              <td data-label="Prioridad">
                 <span class="priority-badge"
                   [ngClass]="{
                     'priority-alta':  queja.prioridad === 'ALTA',
@@ -59,7 +59,7 @@
                 </span>
               </td>
 
-              <td>
+              <td data-label="Estado">
                 <span class="status-badge"
                   [ngClass]="{
                     'status-registrada':    queja.estado === 'REGISTRADA',
@@ -71,9 +71,9 @@
                 </span>
               </td>
 
-              <td>{{ queja.incidentLocation }}</td>
+              <td data-label="Lugar">{{ queja.incidentLocation }}</td>
 
-              <td *ngIf="esAdmin" class="text-center">
+              <td *ngIf="esAdmin" class="text-center action-cell" data-label="Acciones">
                 <button class="btn-bank-outline me-2"
                         [disabled]="queja.estado === 'DICTAMINADA' || queja.estado === 'CERRADA'"
                         (click)="abrirModalDictamen(queja.folio)">
