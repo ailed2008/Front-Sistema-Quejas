@@ -44,9 +44,9 @@
             <tr *ngFor="let queja of quejas">
 
               <td class="folio-cell">{{ queja.folio }}</td>
-              <td>{{ queja.numCliente }}</td>
-              <td>{{ queja.fechaRecepcion | date:'dd/MM/yyyy' }}</td>
-              <td>${{ queja.montoReclamado | number:'1.2-2' }}</td>
+              <td>{{ queja.customerNumber }}</td>
+              <td>{{ queja.receptionDate | date:'dd/MM/yyyy' }}</td>
+              <td>${{ queja.claimedAmount | number:'1.2-2' }}</td>
 
               <td>
                 <span class="priority-badge"
@@ -71,7 +71,7 @@
                 </span>
               </td>
 
-              <td>{{ queja.lugarSuceso }}</td>
+              <td>{{ queja.incidentLocation }}</td>
 
               <td *ngIf="esAdmin" class="text-center">
                 <button class="btn-bank-outline me-2"
