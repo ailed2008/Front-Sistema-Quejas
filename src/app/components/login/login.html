@@ -37,6 +37,37 @@
 
       </form>
 
+      <!-- Cuentas de demo -->
+      <div style="margin-top:1.5rem;border-top:1px solid #e2e6ea;padding-top:1rem;">
+        <p style="font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;color:#a0aec0;margin-bottom:0.75rem;text-align:center;">
+          Cuentas de demostración
+        </p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+
+          <div style="background:#f7f9fc;border:1px solid #e2e6ea;padding:0.6rem 0.75rem;border-radius:3px;cursor:pointer;"
+               (click)="fillDemo('admin@banco.com','Admin123*')">
+            <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.06em;color:#0a2d6e;text-transform:uppercase;">
+              Administrador
+            </div>
+            <div style="font-size:0.73rem;color:#4a5568;margin-top:2px;">admin&#64;banco.com</div>
+            <div style="font-size:0.7rem;color:#a0aec0;">Admin123*</div>
+          </div>
+
+          <div style="background:#f7f9fc;border:1px solid #e2e6ea;padding:0.6rem 0.75rem;border-radius:3px;cursor:pointer;"
+               (click)="fillDemo('ejecutivo@banco.com','Ejecutivo123*')">
+            <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.06em;color:#4a5568;text-transform:uppercase;">
+              Ejecutivo
+            </div>
+            <div style="font-size:0.73rem;color:#4a5568;margin-top:2px;">ejecutivo&#64;banco.com</div>
+            <div style="font-size:0.7rem;color:#a0aec0;">Ejecutivo123*</div>
+          </div>
+
+        </div>
+        <p style="font-size:0.67rem;color:#a0aec0;text-align:center;margin-top:0.5rem;margin-bottom:0;">
+          Clic en una cuenta para autocompletar
+        </p>
+      </div>
+
     </div>
   </div>
 </div>

@@ -29,8 +29,11 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onLogin(): void {
-    if (this.loginForm.invalid) {
+  fillDemo(username: string, password: string): void {
+    this.loginForm.setValue({ username, password });
+  }
+
+  onLogin(): void {    if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
